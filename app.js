@@ -31,8 +31,26 @@ app.get("/api/v1/product/:productId/reviews/:reviewId", (req, res) => {
   res.send("Hello Testing");
 });
 
-app.get("api/v1/query", (req, res) => {
+app.get("/api/v1/query", (req, res) => {
   console.log(req.query);
+  const { search, limit } = req.query;
+  let sortedPorducts = [...products];
+
+  if (search) {
+    sortedPorducts = sortedPorducts.filter((product) => {
+      return product.name.startsWith(search);
+    });
+  }
+
+  if (limit) {
+    sortedPorducts = sortedPorducts.slice(0, Number(limit));
+  }
+
+  if (sortedPorducts.length < 1) {
+    return res.status(200).json({ success: true, data: [] });
+  }
+
+  res.status(200).json(sortedPorducts);
 });
 
 app.listen(5000, () => {
