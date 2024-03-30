@@ -12,8 +12,11 @@ app.get("/api/people", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log(req.body);
-  res.send("post");
+  const { name } = req.body;
+  if (name) {
+    res.status(200).send(`Welcome ${name}`)
+  }
+  res.status(401).send("Please porvide name");
 });
 
 app.listen(5000, () => {
